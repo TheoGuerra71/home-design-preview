@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Design · Posts</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0D0C;--card:#1A1917;--ouro:#C9A96E;--fg:#F4EFE7;--mut:#A39C90}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:'Montserrat',system-ui,sans-serif;font-weight:300}
+header{padding:48px 16px 18px;text-align:center}
+header small{font-size:11px;letter-spacing:.4em;color:var(--ouro);font-weight:600}
+header h1{font-family:'EB Garamond',serif;font-weight:400;font-size:clamp(34px,5vw,54px);margin-top:10px}
+header p{color:var(--mut);font-size:14px;margin-top:8px}
+.filtros{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px 16px 26px}
+.filtros button{font:inherit;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--fg);background:none;border:1px solid #3a3734;padding:9px 14px;cursor:pointer}
+.filtros button.on{background:var(--ouro);border-color:var(--ouro);color:var(--bg)}
+h2{font-family:'EB Garamond',serif;font-weight:400;font-size:28px;max-width:1240px;margin:20px auto 16px;padding:0 16px}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;max-width:1240px;margin:0 auto 40px;padding:0 16px}
+.item{background:var(--card);cursor:pointer;border:0;text-align:left;color:inherit;font:inherit;transition:transform .25s}
+.item:hover{transform:translateY(-4px)}
+.item .cap{position:relative;aspect-ratio:4/5;background:#000 center/cover}
+.item .qtd{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);font-size:11px;padding:4px 8px;font-weight:500}
+.item .tx{padding:12px 14px 16px}
+.item b{display:block;font-weight:500;font-size:14px;line-height:1.35}
+.item span{display:block;font-size:10px;letter-spacing:.25em;color:var(--ouro);margin-top:6px;font-weight:600;text-transform:uppercase}
+
+/* modal estilo Instagram */
+.modal{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center}
+.modal.on{display:flex}
+.post{width:min(470px,94vw);background:#000;border:1px solid #262626;border-radius:6px;overflow:hidden}
+.post .topo{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #262626}
+.post .av{width:32px;height:32px;border-radius:50%;background:#0E0D0C;border:1px solid var(--ouro);display:grid;place-items:center}
+.post .topo b{font-size:13px;font-weight:600}.post .topo small{display:block;font-size:11px;color:var(--mut)}
+.palco{position:relative;aspect-ratio:4/5;overflow:hidden;touch-action:pan-y;background:#000}
+.trilho{display:flex;height:100%;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.trilho img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.seta{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.85);color:#111;border:0;font-size:16px;cursor:pointer;display:grid;place-items:center}
+.seta.esq{left:10px}.seta.dir{right:10px}.seta[hidden]{display:none}
+.cont{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.6);font-size:12px;padding:3px 9px;border-radius:12px}
+.pontos{display:flex;gap:4px;justify-content:center;padding:12px}
+.pontos i{width:6px;height:6px;border-radius:50%;background:#555}.pontos i.on{background:#3897f0}
+.post .leg{padding:0 14px 16px;font-size:13px;line-height:1.5}.post .leg b{font-weight:600;margin-right:6px}
+.fechar{position:fixed;top:14px;right:18px;font-size:34px;color:#fff;background:none;border:0;cursor:pointer;line-height:1}
+.nav{position:fixed;top:50%;transform:translateY(-50%);font-size:40px;color:#fff;background:none;border:0;cursor:pointer;opacity:.7}
+.nav:hover{opacity:1}.nav.ant{left:14px}.nav.prox{right:14px}
+@media(max-width:640px){.nav{display:none}}
+</style>
+</head>
+<body>
+<header><small>HOME DESIGN · INSTAGRAM</small><h1>Carrosséis e respiros</h1><p>Clique para abrir como no Instagram. Use as setas, o teclado ou arraste.</p></header>
+<div class="filtros" id="filtros"></div>
+<h2>Carrosséis</h2><div class="grade" id="gCar"></div>
+<h2>Respiros</h2><div class="grade" id="gResp"></div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <button class="fechar" id="fechar" aria-label="Fechar">×</button>
+  <button class="nav ant" id="postAnt" aria-label="Post anterior">‹</button>
+  <div class="post">
+    <div class="topo"><div class="av"><svg viewBox="0 0 44 38" width="18" height="16" fill="none" stroke="#C9A96E" stroke-width="2.4"><path d="M3 19 L22 3 L41 19"/><path d="M9 14 V35 H35 V14"/><path d="M27 35 V24"/></svg></div><div><b>homedesign.rj</b><small id="mLinha"></small></div></div>
+    <div class="palco" id="palco"><div class="trilho" id="trilho"></div>
+      <button class="seta esq" id="sEsq" aria-label="Anterior">‹</button><button class="seta dir" id="sDir" aria-label="Próximo">›</button>
+      <div class="cont" id="cont"></div></div>
+    <div class="pontos" id="pontos"></div>
+    <div class="leg"><b>homedesign.rj</b><span id="mTitulo"></span></div>
+  </div>
+  <button class="nav prox" id="postProx" aria-label="Próximo post">›</button>
+</div>
+
+<script>
+const DADOS = {"carrosseis": [{"id": "carrossel-01", "titulo": "5 detalhes de cozinha de alto padrão", "linha": "Escuro luxo", "slides": ["carrossel-01/slide-01.jpg", "carrossel-01/slide-02.jpg", "carrossel-01/slide-03.jpg", "carrossel-01/slide-04.jpg", "carrossel-01/slide-05.jpg", "carrossel-01/slide-06.jpg", "carrossel-01/slide-07.jpg"]}, {"id": "carrossel-02-editorial", "titulo": "O closet que organiza a sua manhã", "linha": "Editorial", "slides": ["carrossel-02-editorial/slide-01.jpg", "carrossel-02-editorial/slide-02.jpg", "carrossel-02-editorial/slide-03.jpg", "carrossel-02-editorial/slide-04.jpg", "carrossel-02-editorial/slide-05.jpg", "carrossel-02-editorial/slide-06.jpg"]}, {"id": "carrossel-03-bold", "titulo": "Qual acabamento é pra você?", "linha": "Bold", "slides": ["carrossel-03-bold/slide-01.jpg", "carrossel-03-bold/slide-02.jpg", "carrossel-03-bold/slide-03.jpg", "carrossel-03-bold/slide-04.jpg", "carrossel-03-bold/slide-05.jpg", "carrossel-03-bold/slide-06.jpg"]}, {"id": "carrossel-05-lookbook", "titulo": "Painéis de TV: 5 ideias", "linha": "Lookbook", "slides": ["carrossel-05-lookbook/slide-01.jpg", "carrossel-05-lookbook/slide-02.jpg", "carrossel-05-lookbook/slide-03.jpg", "carrossel-05-lookbook/slide-04.jpg", "carrossel-05-lookbook/slide-05.jpg", "carrossel-05-lookbook/slide-06.jpg", "carrossel-05-lookbook/slide-07.jpg"]}, {"id": "carrossel-06-luxo-banheiro", "titulo": "Banheiro com cara de spa", "linha": "Escuro luxo", "slides": ["carrossel-06-luxo-banheiro/slide-01.jpg", "carrossel-06-luxo-banheiro/slide-02.jpg", "carrossel-06-luxo-banheiro/slide-03.jpg", "carrossel-06-luxo-banheiro/slide-04.jpg", "carrossel-06-luxo-banheiro/slide-05.jpg", "carrossel-06-luxo-banheiro/slide-06.jpg"]}, {"id": "carrossel-07-editorial-quarto", "titulo": "A cabeceira que vira arquitetura", "linha": "Editorial", "slides": ["carrossel-07-editorial-quarto/slide-01.jpg", "carrossel-07-editorial-quarto/slide-02.jpg", "carrossel-07-editorial-quarto/slide-03.jpg", "carrossel-07-editorial-quarto/slide-04.jpg", "carrossel-07-editorial-quarto/slide-05.jpg", "carrossel-07-editorial-quarto/slide-06.jpg"]}, {"id": "carrossel-08-bold-erros", "titulo": "4 erros que encarecem sua cozinha", "linha": "Bold", "slides": ["carrossel-08-bold-erros/slide-01.jpg", "carrossel-08-bold-erros/slide-02.jpg", "carrossel-08-bold-erros/slide-03.jpg", "carrossel-08-bold-erros/slide-04.jpg", "carrossel-08-bold-erros/slide-05.jpg", "carrossel-08-bold-erros/slide-06.jpg"]}, {"id": "carrossel-09-lookbook-cozinhas", "titulo": "Cozinhas: 5 estilos", "linha": "Lookbook", "slides": ["carrossel-09-lookbook-cozinhas/slide-01.jpg", "carrossel-09-lookbook-cozinhas/slide-02.jpg", "carrossel-09-lookbook-cozinhas/slide-03.jpg", "carrossel-09-lookbook-cozinhas/slide-04.jpg", "carrossel-09-lookbook-cozinhas/slide-05.jpg", "carrossel-09-lookbook-cozinhas/slide-06.jpg", "carrossel-09-lookbook-cozinhas/slide-07.jpg"]}, {"id": "carrossel-10-lookbook-closets", "titulo": "Closets: 5 inspirações", "linha": "Lookbook", "slides": ["carrossel-10-lookbook-closets/slide-01.jpg", "carrossel-10-lookbook-closets/slide-02.jpg", "carrossel-10-lookbook-closets/slide-03.jpg", "carrossel-10-lookbook-closets/slide-04.jpg", "carrossel-10-lookbook-closets/slide-05.jpg", "carrossel-10-lookbook-closets/slide-06.jpg", "carrossel-10-lookbook-closets/slide-07.jpg"]}, {"id": "carrossel-11-luxo-sala", "titulo": "Sala com cara de projeto", "linha": "Escuro luxo", "slides": ["carrossel-11-luxo-sala/slide-01.jpg", "carrossel-11-luxo-sala/slide-02.jpg", "carrossel-11-luxo-sala/slide-03.jpg", "carrossel-11-luxo-sala/slide-04.jpg", "carrossel-11-luxo-sala/slide-05.jpg", "carrossel-11-luxo-sala/slide-06.jpg"]}, {"id": "carrossel-12-bold-planejado-modulado", "titulo": "Planejado x modulado", "linha": "Bold", "slides": ["carrossel-12-bold-planejado-modulado/slide-01.jpg", "carrossel-12-bold-planejado-modulado/slide-02.jpg", "carrossel-12-bold-planejado-modulado/slide-03.jpg", "carrossel-12-bold-planejado-modulado/slide-04.jpg", "carrossel-12-bold-planejado-modulado/slide-05.jpg", "carrossel-12-bold-planejado-modulado/slide-06.jpg"]}, {"id": "carrossel-13-bold-perguntas", "titulo": "5 perguntas antes de fechar", "linha": "Bold", "slides": ["carrossel-13-bold-perguntas/slide-01.jpg", "carrossel-13-bold-perguntas/slide-02.jpg", "carrossel-13-bold-perguntas/slide-03.jpg", "carrossel-13-bold-perguntas/slide-04.jpg", "carrossel-13-bold-perguntas/slide-05.jpg", "carrossel-13-bold-perguntas/slide-06.jpg", "carrossel-13-bold-perguntas/slide-07.jpg"]}, {"id": "carrossel-14-bold-prazo", "titulo": "O que define o prazo", "linha": "Bold", "slides": ["carrossel-14-bold-prazo/slide-01.jpg", "carrossel-14-bold-prazo/slide-02.jpg", "carrossel-14-bold-prazo/slide-03.jpg", "carrossel-14-bold-prazo/slide-04.jpg", "carrossel-14-bold-prazo/slide-05.jpg", "carrossel-14-bold-prazo/slide-06.jpg"]}, {"id": "carrossel-15-bold-erros-closet", "titulo": "3 erros que estragam o closet", "linha": "Bold", "slides": ["carrossel-15-bold-erros-closet/slide-01.jpg", "carrossel-15-bold-erros-closet/slide-02.jpg", "carrossel-15-bold-erros-closet/slide-03.jpg", "carrossel-15-bold-erros-closet/slide-04.jpg", "carrossel-15-bold-erros-closet/slide-05.jpg"]}], "respiros": [{"id": "respiros", "titulo": "Posts de respiro", "linha": "Respiro", "slides": ["respiros/slide-01.jpg", "respiros/slide-02.jpg", "respiros/slide-03.jpg", "respiros/slide-04.jpg", "respiros/slide-05.jpg", "respiros/slide-06.jpg", "respiros/slide-07.jpg", "respiros/slide-08.jpg", "respiros/slide-09.jpg", "respiros/slide-10.jpg"]}]};
+// respiros: cada imagem é um post de 1 slide
+const RESP = DADOS.respiros[0].slides.map((s,i) => ({ id:'r'+i, titulo:'Respiro ' + String(i+1).padStart(2,'0'), linha:'Respiro', slides:[s] }));
+const TODOS = [...DADOS.carrosseis, ...RESP];
+let filtro = 'Todos', lista = TODOS, atual = 0, idx = 0;
+
+function card(p){ const b = document.createElement('button'); b.className = 'item';
+  b.innerHTML = `<div class="cap" style="background-image:url('${p.slides[0]}')">${p.slides.length > 1 ? `<span class="qtd">1/${p.slides.length}</span>` : ''}</div><div class="tx"><b>${p.titulo}</b><span>${p.linha}</span></div>`;
+  b.onclick = () => abre(p); return b; }
+function desenha(){
+  const gC = document.getElementById('gCar'), gR = document.getElementById('gResp'); gC.innerHTML = gR.innerHTML = '';
+  lista = TODOS.filter(p => filtro === 'Todos' || p.linha === filtro);
+  lista.filter(p => p.linha !== 'Respiro').forEach(p => gC.appendChild(card(p)));
+  lista.filter(p => p.linha === 'Respiro').forEach(p => gR.appendChild(card(p)));
+  gC.previousElementSibling.style.display = gC.children.length ? '' : 'none';
+  gR.previousElementSibling.style.display = gR.children.length ? '' : 'none';
+}
+const linhas = ['Todos', 'Escuro luxo', 'Editorial', 'Bold', 'Lookbook', 'Respiro'];
+linhas.forEach(l => { const b = document.createElement('button'); b.textContent = l; if (l === filtro) b.className = 'on';
+  b.onclick = () => { filtro = l; document.querySelectorAll('.filtros button').forEach(x => x.classList.toggle('on', x === b)); desenha(); };
+  document.getElementById('filtros').appendChild(b); });
+desenha();
+
+const modal = document.getElementById('modal'), trilho = document.getElementById('trilho');
+function abre(p){ atual = lista.indexOf(p); idx = 0;
+  trilho.innerHTML = p.slides.map(s => `<img src="${s}" alt="">`).join('');
+  document.getElementById('mTitulo').textContent = p.titulo; document.getElementById('mLinha').textContent = p.linha;
+  document.getElementById('pontos').innerHTML = p.slides.length > 1 ? p.slides.map(() => '<i></i>').join('') : '';
+  modal.classList.add('on'); vai(0); }
+function vai(n){ const p = lista[atual]; idx = Math.max(0, Math.min(p.slides.length - 1, n));
+  trilho.style.transform = `translateX(${-idx * 100}%)`;
+  document.getElementById('sEsq').hidden = idx === 0; document.getElementById('sDir').hidden = idx === p.slides.length - 1;
+  document.getElementById('cont').textContent = p.slides.length > 1 ? `${idx + 1}/${p.slides.length}` : '';
+  document.getElementById('cont').style.display = p.slides.length > 1 ? '' : 'none';
+  document.querySelectorAll('#pontos i').forEach((el, i) => el.classList.toggle('on', i === idx)); }
+const fecha = () => modal.classList.remove('on');
+const outroPost = d => { const n = (atual + d + lista.length) % lista.length; abre(lista[n]); };
+document.getElementById('sEsq').onclick = () => vai(idx - 1);
+document.getElementById('sDir').onclick = () => vai(idx + 1);
+document.getElementById('fechar').onclick = fecha;
+document.getElementById('postAnt').onclick = () => outroPost(-1);
+document.getElementById('postProx').onclick = () => outroPost(1);
+modal.addEventListener('click', e => { if (e.target === modal) fecha(); });
+addEventListener('keydown', e => { if (!modal.classList.contains('on')) return;
+  if (e.key === 'Escape') fecha(); if (e.key === 'ArrowRight') idx < lista[atual].slides.length - 1 ? vai(idx + 1) : outroPost(1);
+  if (e.key === 'ArrowLeft') idx > 0 ? vai(idx - 1) : outroPost(-1); });
+// arrastar (celular e mouse)
+const palco = document.getElementById('palco'); let x0 = null;
+palco.addEventListener('pointerdown', e => { x0 = e.clientX; });
+palco.addEventListener('pointerup', e => { if (x0 === null) return; const dx = e.clientX - x0; if (Math.abs(dx) > 40) vai(idx + (dx < 0 ? 1 : -1)); x0 = null; });
+</script>
+</body>
+</html>
